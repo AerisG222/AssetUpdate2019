@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AssetUpdate2019.Data;
-
+using NMagickWand;
 
 namespace AssetUpdate2019
 {
@@ -34,11 +34,15 @@ namespace AssetUpdate2019
 
         async Task ExecuteAsync()
         {
+            MagickWandEnvironment.Genesis();
+
             var photos = await _repo.GetPhotosAsync();
             var videos = await _repo.GetVideosAsync();
 
             Console.WriteLine($"Found {photos.Count()} photos");
             Console.WriteLine($"Found {videos.Count()} videos");
+
+            MagickWandEnvironment.Terminus();
         }
     }
 }
