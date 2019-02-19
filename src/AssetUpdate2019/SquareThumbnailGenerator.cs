@@ -1,5 +1,8 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
+using NJpegOptim;
+using NJpegTran;
 using NMagickWand;
 
 
@@ -69,6 +72,39 @@ namespace AssetUpdate2019
 
                 wand.WriteImage(_destPath, true);
             }
+
+            ExecuteJpegOptimAsync(_destPath);
+            ExecuteJpegTranAsync(_destPath);
+        }
+
+
+        NJpegOptim.Result ExecuteJpegOptimAsync(string srcPath)
+        {
+            var opts = new NJpegOptim.Options {
+                StripProperties = StripProperty.All,
+                ProgressiveMode = ProgressiveMode.ForceProgressive,
+                MaxQuality = 72,
+                OutputToStream = true
+            };
+
+            var jo = new JpegOptim(opts);
+
+            // ideally wouldn't block here but am being lazy
+            return jo.RunAsync(srcPath).Result;
+        }
+
+
+        NJpegTran.Result ExecuteJpegTranAsync(string dstPath)
+        {
+            var opts = new NJpegTran.Options {
+                Optimize = true,
+                Copy = Copy.None
+            };
+
+            var jt = new JpegTran(opts);
+
+            // ideally wouldn't block here but am being lazy
+            return jt.RunAsync(dstPath, dstPath).Result;
         }
     }
 }
