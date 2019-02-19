@@ -65,9 +65,21 @@ namespace AssetUpdate2019.Data
         }
 
 
+        public IEnumerable<string> GetPhotoFiles()
+        {
+            return GetFiles(_photoRoot);
+        }
+
+
+        public IEnumerable<string> GetVideoFiles()
+        {
+            return GetFiles(_videoRoot);
+        }
+
+
         void GetPhotoMedia()
         {
-            var files = GetFiles(_photoRoot);
+            var files = GetPhotoFiles();
 
             Parallel.ForEach(files, _parallelOpts, PopulatePhotoMedia);
         }
@@ -75,7 +87,7 @@ namespace AssetUpdate2019.Data
 
         void GetVideoMedia()
         {
-            var files = GetFiles(_videoRoot);
+            var files = GetVideoFiles();
 
             Parallel.ForEach(files, _parallelOpts, PopulateVideoMedia);
         }

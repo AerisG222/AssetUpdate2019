@@ -32,30 +32,30 @@ namespace AssetUpdate2019
         }
 
 
-        void Generate()
+        public void Generate()
         {
             using(var wand = new MagickWand(_sourcePath))
             {
-                var width = wand.ImageWidth;
-                var height = wand.ImageHeight;
-                var aspect = (double)width / (double)height;
+                var width = (double)wand.ImageWidth;
+                var height = (double)wand.ImageHeight;
+                var aspect = width / height;
 
                 if(aspect >= Aspect)
                 {
-                    uint newWidth = (width / height) * FinalHeight;
+                    var newWidth = (width / height) * FinalHeight;
 
                     // scale image to final height
-                    wand.ScaleImage(newWidth, FinalHeight);
+                    wand.ScaleImage((uint) newWidth, FinalHeight);
 
                     // crop sides as needed
                     wand.CropImage(FinalWidth, FinalHeight, (int) (newWidth - FinalWidth) / 2, 0);
                 }
                 else
                 {
-                    uint newHeight = FinalWidth / (width / height);
+                    var newHeight = FinalWidth / (width / height);
 
                     // scale image to final width
-                    wand.ScaleImage(FinalWidth, newHeight);
+                    wand.ScaleImage(FinalWidth, (uint) newHeight);
 
                     // crop top and bottom as needed
                     wand.CropImage(FinalWidth, FinalHeight, 0, (int) (newHeight - FinalHeight) / 2);

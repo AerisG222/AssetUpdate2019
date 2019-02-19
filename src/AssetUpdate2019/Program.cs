@@ -1,21 +1,24 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using AssetUpdate2019.Data;
 using NMagickWand;
+using AssetUpdate2019.Data;
+
 
 namespace AssetUpdate2019
 {
     class Program
     {
-        Repository _repo;
-        Storage _storage;
+        readonly Repository _repo;
+        readonly Storage _storage;
+        readonly ThumbnailProcess _thumbnailProcess;
 
 
         Program(string connString, string photoRoot, string videoRoot)
         {
             _repo = new Repository(connString);
             _storage = new Storage(photoRoot, videoRoot);
+            _thumbnailProcess = new ThumbnailProcess(_storage);
         }
 
 
@@ -38,14 +41,20 @@ namespace AssetUpdate2019
         {
             MagickWandEnvironment.Genesis();
 
-            var photos = await _repo.GetPhotosAsync();
+            Console.WriteLine("Generating new thumbnails for photos...");
+            _thumbnailProcess.CreateNewPhotoThumbnails();
+
+            Console.WriteLine("Generating new thumbnails for videos...");
+            _thumbnailProcess.CreateNewVideoThumbnails();
+
+            // var photos = await _repo.GetPhotosAsync();
             var videos = await _repo.GetVideosAsync();
 
-            Console.WriteLine($"Found {photos.Count()} photos in db");
+            // Console.WriteLine($"Found {photos.Count()} photos in db");
             Console.WriteLine($"Found {videos.Count()} videos in db");
 
-            var photoFiles = _storage.GetPhotos();
-            var videoFiles = _storage.GetVideos();
+            // var photoFiles = _storage.GetPhotos();
+            // var videoFiles = _storage.GetVideos();
 
             MagickWandEnvironment.Terminus();
         }
