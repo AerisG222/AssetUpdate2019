@@ -185,13 +185,13 @@ namespace AssetUpdate2019.Data
 
         IEnumerable<Photo> AssemblePhotos()
         {
-            var xsMedia =   _photoList.Where(x => x.Path.IndexOf("/xs/", StringComparison.OrdinalIgnoreCase) > -1).ToList();
-            var xsSqMedia = _photoList.Where(x => x.Path.IndexOf("/xs_sq/", StringComparison.OrdinalIgnoreCase) > -1).ToList();
-            var smMedia =   _photoList.Where(x => x.Path.IndexOf("/sm/", StringComparison.OrdinalIgnoreCase) > -1).ToList();
-            var mdMedia =   _photoList.Where(x => x.Path.IndexOf("/md/", StringComparison.OrdinalIgnoreCase) > -1).ToList();
-            var lgMedia =   _photoList.Where(x => x.Path.IndexOf("/lg/", StringComparison.OrdinalIgnoreCase) > -1).ToList();
-            var prtMedia = _photoList.Where(x => x.Path.IndexOf("/prt/", StringComparison.OrdinalIgnoreCase) > -1).ToList();
-            var srcMedia = _photoList.Where(x => x.Path.IndexOf("/src/", StringComparison.OrdinalIgnoreCase) > -1).ToList();
+            var xsMedia =   _photoList.Where(x => x.Path.IndexOf("/xs/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => x.Path);
+            var xsSqMedia = _photoList.Where(x => x.Path.IndexOf("/xs_sq/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => x.Path);
+            var smMedia =   _photoList.Where(x => x.Path.IndexOf("/sm/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => x.Path);
+            var mdMedia =   _photoList.Where(x => x.Path.IndexOf("/md/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => x.Path);
+            var lgMedia =   _photoList.Where(x => x.Path.IndexOf("/lg/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => x.Path);
+            var prtMedia = _photoList.Where(x => x.Path.IndexOf("/prt/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => x.Path);
+            var srcMedia = _photoList.Where(x => x.Path.IndexOf("/src/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => x.Path);
 
             Console.WriteLine("Verify that the following counts match:");
             Console.WriteLine($"xs: {xsMedia.Count}");
@@ -202,14 +202,30 @@ namespace AssetUpdate2019.Data
             Console.WriteLine($"prt: {prtMedia.Count}");
             Console.WriteLine($"src: {srcMedia.Count}");
 
-            var photos = xsMedia.Select(x => new Photo {
-                MediaXs = x,
-                MediaXsSq = xsSqMedia.SingleOrDefault(y => string.Equals(y.Path, x.Path.Replace("/xs/", "/xs_sq/", StringComparison.OrdinalIgnoreCase), StringComparison.OrdinalIgnoreCase)),
-                MediaSm =   xsSqMedia.SingleOrDefault(y => string.Equals(y.Path, x.Path.Replace("/xs/", "/sm/", StringComparison.OrdinalIgnoreCase), StringComparison.OrdinalIgnoreCase)),
-                MediaMd =   xsSqMedia.SingleOrDefault(y => string.Equals(y.Path, x.Path.Replace("/xs/", "/md/", StringComparison.OrdinalIgnoreCase), StringComparison.OrdinalIgnoreCase)),
-                MediaLg =   xsSqMedia.SingleOrDefault(y => string.Equals(y.Path, x.Path.Replace("/xs/", "/lg/", StringComparison.OrdinalIgnoreCase), StringComparison.OrdinalIgnoreCase)),
-                MediaPrt =  xsSqMedia.SingleOrDefault(y => string.Equals(y.Path, x.Path.Replace("/xs/", "/prt/", StringComparison.OrdinalIgnoreCase), StringComparison.OrdinalIgnoreCase)),
-                MediaSrc =  xsSqMedia.SingleOrDefault(y => string.Equals(y.Path, x.Path.Replace("/xs/", "/src/", StringComparison.OrdinalIgnoreCase), StringComparison.OrdinalIgnoreCase)),
+            var photos = xsMedia.Keys.Select(key => {
+                Media xsSq = null;
+                Media sm = null;
+                Media md = null;
+                Media lg = null;
+                Media prt = null;
+                Media src = null;
+
+                xsSqMedia.TryGetValue(key.Replace("/xs/", "/xs_sq/"), out xsSq);
+                smMedia.TryGetValue(key.Replace("/xs/", "/sm/"), out sm);
+                mdMedia.TryGetValue(key.Replace("/xs/", "/md/"), out md);
+                lgMedia.TryGetValue(key.Replace("/xs/", "/lg/"), out lg);
+                prtMedia.TryGetValue(key.Replace("/xs/", "/prt/"), out prt);
+                srcMedia.TryGetValue(key.Replace("/xs/", "/src/"), out src);
+
+                return new Photo {
+                    MediaXs = xsMedia[key],
+                    MediaXsSq = xsSq,
+                    MediaSm = sm,
+                    MediaMd = md,
+                    MediaLg = lg,
+                    MediaPrt = prt,
+                    MediaSrc = src,
+                };
             });
 
             return photos;
@@ -218,11 +234,11 @@ namespace AssetUpdate2019.Data
 
         IEnumerable<Video> AssembleVideos()
         {
-            var thumbMedia =   _videoList.Where(x => x.Path.IndexOf("/thumbnails/", StringComparison.OrdinalIgnoreCase) > -1).ToList();
-            var thumbSqMedia = _videoList.Where(x => x.Path.IndexOf("/thumb_sq/", StringComparison.OrdinalIgnoreCase) > -1).ToList();
-            var scaledMedia =  _videoList.Where(x => x.Path.IndexOf("/scaled/", StringComparison.OrdinalIgnoreCase) > -1).ToList();
-            var fullMedia =    _videoList.Where(x => x.Path.IndexOf("/full/", StringComparison.OrdinalIgnoreCase) > -1).ToList();
-            var rawMedia =     _videoList.Where(x => x.Path.IndexOf("/raw/", StringComparison.OrdinalIgnoreCase) > -1).ToList();
+            var thumbMedia =   _videoList.Where(x => x.Path.IndexOf("/thumbnails/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => x.Path);
+            var thumbSqMedia = _videoList.Where(x => x.Path.IndexOf("/thumb_sq/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => x.Path);
+            var scaledMedia =  _videoList.Where(x => x.Path.IndexOf("/scaled/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => x.Path);
+            var fullMedia =    _videoList.Where(x => x.Path.IndexOf("/full/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => x.Path);
+            var rawMedia =     _videoList.Where(x => x.Path.IndexOf("/raw/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => x.Path);
 
             Console.WriteLine("Verify that the following counts match:");
             Console.WriteLine($"thumb: {thumbMedia.Count}");
@@ -231,12 +247,24 @@ namespace AssetUpdate2019.Data
             Console.WriteLine($"full: {fullMedia.Count}");
             Console.WriteLine($"raw: {rawMedia.Count}");
 
-            var videos = thumbMedia.Select(x => new Video {
-                MediaThumbnail = x,
-                MediaThumbnailSq = thumbSqMedia.SingleOrDefault(y => string.Equals(y.Path, x.Path.Replace("/thumbnails/", "/thumb_sq/", StringComparison.OrdinalIgnoreCase), StringComparison.OrdinalIgnoreCase)),
-                MediaScaled =       scaledMedia.SingleOrDefault(y => string.Equals(y.Path, x.Path.Replace("/thumbnails/", "/scaled/", StringComparison.OrdinalIgnoreCase), StringComparison.OrdinalIgnoreCase)),
-                MediaFullsize =       fullMedia.SingleOrDefault(y => string.Equals(y.Path, x.Path.Replace("/thumbnails/", "/full/", StringComparison.OrdinalIgnoreCase), StringComparison.OrdinalIgnoreCase)),
-                MediaRaw =             rawMedia.SingleOrDefault(y => string.Equals(y.Path, x.Path.Replace("/thumbnails/", "/raw/", StringComparison.OrdinalIgnoreCase), StringComparison.OrdinalIgnoreCase)),
+            var videos = thumbMedia.Keys.Select(key => {
+                Media thumbSq = null;
+                Media scaled = null;
+                Media full = null;
+                Media raw = null;
+
+                thumbSqMedia.TryGetValue(key.Replace("/thumbnails/", "/thumb_sq/"), out thumbSq);
+                scaledMedia.TryGetValue(key.Replace("/thumbnails/", "/scaled/"), out scaled);
+                fullMedia.TryGetValue(key.Replace("/thumbnails/", "/full/"), out full);
+                rawMedia.TryGetValue(key.Replace("/thumbnails/", "/raw/"), out raw);
+
+                return new Video {
+                    MediaThumbnail = thumbMedia[key],
+                    MediaThumbnailSq = thumbSq,
+                    MediaScaled = scaled,
+                    MediaFullsize = full,
+                    MediaRaw = raw
+                };
             });
 
             return videos;
