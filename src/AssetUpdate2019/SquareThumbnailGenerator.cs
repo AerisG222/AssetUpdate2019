@@ -68,8 +68,6 @@ namespace AssetUpdate2019
                 // http://www.imagemagick.org/Usage/resize/#resize_unsharp
                 wand.UnsharpMaskImage(0, 0.7, 0.7, 0.008);
 
-                Directory.CreateDirectory(Path.GetDirectoryName(_destPath));
-
                 wand.WriteImage(_destPath, true);
             }
 

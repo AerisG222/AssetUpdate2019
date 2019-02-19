@@ -41,8 +41,8 @@ namespace AssetUpdate2019
         {
             MagickWandEnvironment.Genesis();
 
-            Console.WriteLine("Generating new thumbnails for photos...");
-            _thumbnailProcess.CreateNewPhotoThumbnails();
+            // Console.WriteLine("Generating new thumbnails for photos...");
+            // _thumbnailProcess.CreateNewPhotoThumbnails();
 
             Console.WriteLine("Generating new thumbnails for videos...");
             _thumbnailProcess.CreateNewVideoThumbnails();
