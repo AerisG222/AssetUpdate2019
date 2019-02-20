@@ -113,10 +113,10 @@ namespace AssetUpdate2019
                                         FROM pg_catalog.pg_indexes
                                         WHERE schemaname = 'video'
                                         AND tablename = 'video'
-                                        AND indexname = 'ix_video_video_thumb_path') THEN
+                                        AND indexname = 'ix_video_video_scaled_path') THEN
 
-                            CREATE INDEX ix_video_video_thumb_path
-                                ON video.video(thumb_path);
+                            CREATE INDEX ix_video_video_scaled_path
+                                ON video.video(scaled_path);
 
                         END IF;
                     END
@@ -164,8 +164,9 @@ namespace AssetUpdate2019
                         $"       gps_latitude_ref_id = { SqlString(video.LatitudeRef) }, " +
                         $"       gps_longitude = { SqlNumber(video.Longitude) }, " +
                         $"       gps_longitude_ref_id = { SqlString(video.LongitudeRef) }, " +
-                        $"       create_date = { SqlTimestamp(video.CreateDate) } " +
-                        $" WHERE thumb_path = { SqlString(GetVideoWebPath(video.MediaThumbnail.Path)) };");
+                        $"       create_date = { SqlTimestamp(video.CreateDate) }, " +
+                        $"       thumb_path = REPLACE(thumb_path, '.png', '.jpg') " +
+                        $" WHERE scaled_path = { SqlString(GetVideoWebPath(video.MediaScaled.Path)) };");
                 }
 
                 sw.WriteLine(sep);
@@ -224,7 +225,7 @@ namespace AssetUpdate2019
                 sw.WriteLine(sep);
 
                 sw.WriteLine("DROP INDEX photo.ix_photo_photo_xs_path;");
-                sw.WriteLine("DROP INDEX video.ix_video_video_thumb_path;");
+                sw.WriteLine("DROP INDEX video.ix_video_video_scaled_path;");
 
                 sw.Flush();
             }
