@@ -54,7 +54,7 @@ namespace AssetUpdate2019.Data
 
             Console.WriteLine($"Finished assembling {photos.Count()} photos");
 
-            return photos;
+            return photos.ToList();
         }
 
 
@@ -67,13 +67,13 @@ namespace AssetUpdate2019.Data
             Console.WriteLine();
             Console.WriteLine($"Finished.  Found {_videoList.Count} files");
 
-            Console.WriteLine("Assembling photos...");
+            Console.WriteLine("Assembling videos...");
 
             var videos = AssembleVideos();
 
             Console.WriteLine($"Finished assembling {videos.Count()} videos");
 
-            return videos;
+            return videos.ToList();
         }
 
 
