@@ -84,6 +84,46 @@ namespace AssetUpdate2019
             using(var sw = new StreamWriter(File.OpenWrite(_outputFile)))
             {
                 sw.WriteLine(sep);
+                sw.WriteLine("-- create indexes to improve update performance");
+                sw.WriteLine(sep);
+
+                sw.WriteLine(@"
+                    DO
+                    $$
+                    BEGIN
+                        IF NOT EXISTS (SELECT 1
+                                        FROM pg_catalog.pg_indexes
+                                        WHERE schemaname = 'photo'
+                                        AND tablename = 'photo'
+                                        AND indexname = 'ix_photo_photo_xs_path') THEN
+
+                            CREATE INDEX ix_photo_photo_xs_path
+                                ON photo.photo(xs_path);
+
+                        END IF;
+                    END
+                    $$;"
+                );
+
+                sw.WriteLine(@"
+                    DO
+                    $$
+                    BEGIN
+                        IF NOT EXISTS (SELECT 1
+                                        FROM pg_catalog.pg_indexes
+                                        WHERE schemaname = 'video'
+                                        AND tablename = 'video'
+                                        AND indexname = 'ix_video_video_thumb_path') THEN
+
+                            CREATE INDEX ix_video_video_thumb_path
+                                ON video.video(thumb_path);
+
+                        END IF;
+                    END
+                    $$;"
+                );
+
+                sw.WriteLine(sep);
                 sw.WriteLine("-- add photo sizes and new thumbnail details");
                 sw.WriteLine(sep);
 
@@ -178,6 +218,13 @@ namespace AssetUpdate2019
                     "       teaser_image_sq_path = (SELECT thumb_sq_path FROM video.video WHERE category_id = c.id AND thumb_path = c.teaser_image_path), " +
                     "       teaser_image_sq_size = (SELECT thumb_sq_size FROM video.video WHERE category_id = c.id AND thumb_path = c.teaser_image_path);"
                 );
+
+                sw.WriteLine(sep);
+                sw.WriteLine("-- drop the indexes that were used for these updates");
+                sw.WriteLine(sep);
+
+                sw.WriteLine("DROP INDEX photo.ix_photo_photo_xs_path;");
+                sw.WriteLine("DROP INDEX video.ix_video_video_thumb_path;");
 
                 sw.Flush();
             }
