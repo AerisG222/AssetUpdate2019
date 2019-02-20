@@ -81,8 +81,8 @@ namespace AssetUpdate2019
         {
             DumpImageFromVideo(sourceFile, destThumb);
 
-            var width = 160;
-			var height = 120;
+            var width = 240;
+			var height = 160;
 
             using(var wand = new MagickWand(destThumb))
             {
@@ -141,6 +141,7 @@ namespace AssetUpdate2019
                 ffmpeg.StartInfo.Arguments = arguments;
                 ffmpeg.StartInfo.UseShellExecute = false;
                 ffmpeg.StartInfo.RedirectStandardOutput = true;
+                ffmpeg.StartInfo.RedirectStandardError = true;
                 ffmpeg.Start();
 
                 ffmpeg.StandardOutput.ReadToEnd();

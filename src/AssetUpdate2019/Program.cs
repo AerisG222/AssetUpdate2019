@@ -47,11 +47,11 @@ namespace AssetUpdate2019
         {
             MagickWandEnvironment.Genesis();
 
-            // Console.WriteLine("Generating new thumbnails for photos...");
-            // _thumbnailProcess.CreateNewPhotoThumbnails();
+            Console.WriteLine("Generating new thumbnails for photos...");
+            _thumbnailProcess.CreateNewPhotoThumbnails();
 
-            // Console.WriteLine("Generating new thumbnails (and replacing old pngs with jpgs) for videos...");
-            // _thumbnailProcess.CreateNewVideoThumbnails();
+            Console.WriteLine("Generating new thumbnails (and replacing old pngs with jpgs) for videos...");
+            _thumbnailProcess.CreateNewVideoThumbnails();
 
             // var photos = await _repo.GetPhotosAsync();
             // var videos = await _repo.GetVideosAsync();

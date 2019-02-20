@@ -150,10 +150,15 @@ namespace AssetUpdate2019.Data
 
         void PopulateImageProperties(string file, Media media)
         {
-            using(var wand = new MagickWand(media.Path))
+            // imagemagick can't cope with raw files, but that is ok, because the db already has this
+            // info, so safe to skip
+            if(!file.EndsWith("nef", StringComparison.OrdinalIgnoreCase))
             {
-                media.Height = (int) wand.ImageHeight;
-                media.Width = (int) wand.ImageWidth;
+                using(var wand = new MagickWand(media.Path))
+                {
+                    media.Height = (int) wand.ImageHeight;
+                    media.Width = (int) wand.ImageWidth;
+                }
             }
         }
 
