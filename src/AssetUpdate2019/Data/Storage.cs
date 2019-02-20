@@ -190,13 +190,13 @@ namespace AssetUpdate2019.Data
 
         IEnumerable<Photo> AssemblePhotos()
         {
-            var xsMedia =   _photoList.Where(x => x.Path.IndexOf("/xs/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => x.Path);
-            var xsSqMedia = _photoList.Where(x => x.Path.IndexOf("/xs_sq/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => x.Path);
-            var smMedia =   _photoList.Where(x => x.Path.IndexOf("/sm/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => x.Path);
-            var mdMedia =   _photoList.Where(x => x.Path.IndexOf("/md/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => x.Path);
-            var lgMedia =   _photoList.Where(x => x.Path.IndexOf("/lg/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => x.Path);
-            var prtMedia = _photoList.Where(x => x.Path.IndexOf("/prt/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => x.Path);
-            var srcMedia = _photoList.Where(x => x.Path.IndexOf("/src/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => x.Path);
+            var xsMedia =   _photoList.Where(x => x.Path.IndexOf("/xs/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => GetPathWithoutExtension(x.Path));
+            var xsSqMedia = _photoList.Where(x => x.Path.IndexOf("/xs_sq/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => GetPathWithoutExtension(x.Path));
+            var smMedia =   _photoList.Where(x => x.Path.IndexOf("/sm/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => GetPathWithoutExtension(x.Path));
+            var mdMedia =   _photoList.Where(x => x.Path.IndexOf("/md/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => GetPathWithoutExtension(x.Path));
+            var lgMedia =   _photoList.Where(x => x.Path.IndexOf("/lg/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => GetPathWithoutExtension(x.Path));
+            var prtMedia = _photoList.Where(x => x.Path.IndexOf("/prt/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => GetPathWithoutExtension(x.Path));
+            var srcMedia = _photoList.Where(x => x.Path.IndexOf("/src/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => GetPathWithoutExtension(x.Path));
 
             Console.WriteLine("Verify that the following counts match:");
             Console.WriteLine($"xs: {xsMedia.Count}");
@@ -215,12 +215,12 @@ namespace AssetUpdate2019.Data
                 Media prt = null;
                 Media src = null;
 
-                xsSqMedia.TryGetValue(key.Replace("/xs/", "/xs_sq/"), out xsSq);
-                smMedia.TryGetValue(key.Replace("/xs/", "/sm/"), out sm);
-                mdMedia.TryGetValue(key.Replace("/xs/", "/md/"), out md);
-                lgMedia.TryGetValue(key.Replace("/xs/", "/lg/"), out lg);
-                prtMedia.TryGetValue(key.Replace("/xs/", "/prt/"), out prt);
-                srcMedia.TryGetValue(key.Replace("/xs/", "/src/"), out src);
+                xsSqMedia.TryGetValue(GetPathWithoutExtension(key.Replace("/xs/", "/xs_sq/")), out xsSq);
+                smMedia.TryGetValue(GetPathWithoutExtension(key.Replace("/xs/", "/sm/")), out sm);
+                mdMedia.TryGetValue(GetPathWithoutExtension(key.Replace("/xs/", "/md/")), out md);
+                lgMedia.TryGetValue(GetPathWithoutExtension(key.Replace("/xs/", "/lg/")), out lg);
+                prtMedia.TryGetValue(GetPathWithoutExtension(key.Replace("/xs/", "/prt/")), out prt);
+                srcMedia.TryGetValue(GetPathWithoutExtension(key.Replace("/xs/", "/src/")), out src);
 
                 return new Photo {
                     MediaXs = xsMedia[key],
@@ -239,11 +239,11 @@ namespace AssetUpdate2019.Data
 
         IEnumerable<Video> AssembleVideos()
         {
-            var thumbMedia =   _videoList.Where(x => x.Path.IndexOf("/thumbnails/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => x.Path);
-            var thumbSqMedia = _videoList.Where(x => x.Path.IndexOf("/thumb_sq/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => x.Path);
-            var scaledMedia =  _videoList.Where(x => x.Path.IndexOf("/scaled/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => x.Path);
-            var fullMedia =    _videoList.Where(x => x.Path.IndexOf("/full/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => x.Path);
-            var rawMedia =     _videoList.Where(x => x.Path.IndexOf("/raw/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => x.Path);
+            var thumbMedia =   _videoList.Where(x => x.Path.IndexOf("/thumbnails/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => GetPathWithoutExtension(x.Path));
+            var thumbSqMedia = _videoList.Where(x => x.Path.IndexOf("/thumb_sq/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => GetPathWithoutExtension(x.Path));
+            var scaledMedia =  _videoList.Where(x => x.Path.IndexOf("/scaled/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => GetPathWithoutExtension(x.Path));
+            var fullMedia =    _videoList.Where(x => x.Path.IndexOf("/full/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => GetPathWithoutExtension(x.Path));
+            var rawMedia =     _videoList.Where(x => x.Path.IndexOf("/raw/", StringComparison.OrdinalIgnoreCase) > -1).ToDictionary(x => GetPathWithoutExtension(x.Path));
 
             Console.WriteLine("Verify that the following counts match:");
             Console.WriteLine($"thumb: {thumbMedia.Count}");
@@ -258,10 +258,10 @@ namespace AssetUpdate2019.Data
                 Media full = null;
                 Media raw = null;
 
-                thumbSqMedia.TryGetValue(key.Replace("/thumbnails/", "/thumb_sq/"), out thumbSq);
-                scaledMedia.TryGetValue(key.Replace("/thumbnails/", "/scaled/"), out scaled);
-                fullMedia.TryGetValue(key.Replace("/thumbnails/", "/full/"), out full);
-                rawMedia.TryGetValue(key.Replace("/thumbnails/", "/raw/"), out raw);
+                thumbSqMedia.TryGetValue(GetPathWithoutExtension(key.Replace("/thumbnails/", "/thumb_sq/")), out thumbSq);
+                scaledMedia.TryGetValue(GetPathWithoutExtension(key.Replace("/thumbnails/", "/scaled/")), out scaled);
+                fullMedia.TryGetValue(GetPathWithoutExtension(key.Replace("/thumbnails/", "/full/")), out full);
+                rawMedia.TryGetValue(GetPathWithoutExtension(key.Replace("/thumbnails/", "/raw/")), out raw);
 
                 return new Video {
                     MediaThumbnail = thumbMedia[key],
@@ -273,6 +273,12 @@ namespace AssetUpdate2019.Data
             });
 
             return videos;
+        }
+
+
+        string GetPathWithoutExtension(string path)
+        {
+            return Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path));
         }
     }
 }
