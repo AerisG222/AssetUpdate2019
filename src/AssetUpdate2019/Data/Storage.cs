@@ -35,6 +35,9 @@ namespace AssetUpdate2019.Data
 
             int vpus = Math.Max(Environment.ProcessorCount - 1, 1);
 
+            // given the heavy io, lets try to crank up the threads...
+            vpus = 32;
+
             _parallelOpts = new ParallelOptions { MaxDegreeOfParallelism = vpus };
         }
 
