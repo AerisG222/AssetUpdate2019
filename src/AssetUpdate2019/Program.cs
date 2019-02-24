@@ -139,7 +139,7 @@ namespace AssetUpdate2019
                         $"       src_size = { SqlNumber(photo.MediaSrc?.Size) }, " +
                         $"       xs_sq_height = { SqlNumber(photo.MediaXsSq?.Height) }, " +
                         $"       xs_sq_width = { SqlNumber(photo.MediaXsSq?.Width) }, " +
-                        $"       xs_sq_path = { SqlString(photo.MediaXsSq?.Path) }, " +
+                        $"       xs_sq_path = { SqlString(GetPhotoWebPath(photo.MediaXsSq?.Path)) }, " +
                         $"       xs_sq_size = { SqlNumber(photo.MediaXsSq?.Size) } " +
                         $" WHERE xs_path = { SqlString(GetPhotoWebPath(photo.MediaXs.Path)) };");
                 }
@@ -158,7 +158,7 @@ namespace AssetUpdate2019
                         $"       raw_size = { SqlNumber(video.MediaRaw?.Size) }, " +
                         $"       thumb_sq_height = { SqlNumber(video.MediaThumbnailSq?.Height) }, " +
                         $"       thumb_sq_width = { SqlNumber(video.MediaThumbnailSq?.Width) }, " +
-                        $"       thumb_sq_path = { SqlString(video.MediaThumbnailSq?.Path) }, " +
+                        $"       thumb_sq_path = { SqlString(GetVideoWebPath(video.MediaThumbnailSq?.Path)) }, " +
                         $"       thumb_sq_size = { SqlNumber(video.MediaThumbnailSq?.Size) }, " +
                         $"       gps_latitude = { SqlNumber(video.Latitude) }, " +
                         $"       gps_latitude_ref_id = { SqlString(video.LatitudeRef) }, " +
