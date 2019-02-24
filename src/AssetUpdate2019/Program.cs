@@ -156,10 +156,10 @@ namespace AssetUpdate2019
                         $"       scaled_size = { SqlNumber(video.MediaScaled?.Size) }, " +
                         $"       full_size = { SqlNumber(video.MediaFullsize?.Size) }, " +
                         $"       raw_size = { SqlNumber(video.MediaRaw?.Size) }, " +
-                        $"       xs_sq_height = { SqlNumber(video.MediaThumbnailSq?.Height) }, " +
-                        $"       xs_sq_width = { SqlNumber(video.MediaThumbnailSq?.Width) }, " +
-                        $"       xs_sq_path = { SqlString(video.MediaThumbnailSq?.Path) }, " +
-                        $"       xs_sq_size = { SqlNumber(video.MediaThumbnailSq?.Size) }, " +
+                        $"       thumb_sq_height = { SqlNumber(video.MediaThumbnailSq?.Height) }, " +
+                        $"       thumb_sq_width = { SqlNumber(video.MediaThumbnailSq?.Width) }, " +
+                        $"       thumb_sq_path = { SqlString(video.MediaThumbnailSq?.Path) }, " +
+                        $"       thumb_sq_size = { SqlNumber(video.MediaThumbnailSq?.Size) }, " +
                         $"       gps_latitude = { SqlNumber(video.Latitude) }, " +
                         $"       gps_latitude_ref_id = { SqlString(video.LatitudeRef) }, " +
                         $"       gps_longitude = { SqlNumber(video.Longitude) }, " +
